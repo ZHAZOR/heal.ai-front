@@ -94,8 +94,9 @@
 
 	<div class="dashboard-grid">
 		<!-- Top Bar: AI Food Scanner (Properly Arranged Horizontal) -->
-		<section style="display: flex; flex-direction: column; gap: 20px; padding: 25px;">
-			<div style="display: flex; align-items: center; justify-content: space-between;">
+		<section class="scanner-section" style="padding: 25px;">
+			<div
+				style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
 				<div style="display: flex; align-items: center; gap: 15px;">
 					<div
 						style="width: 50px; height: 50px; border-radius: 50%; background: var(--glass-bg); display: flex; align-items: center; justify-content: center; border: 1px solid var(--glass-border); color: #81D8D0; font-size: 1.5rem;">
@@ -106,23 +107,43 @@
 						<p style="font-size: 0.75rem; opacity: 0.6; margin: 0;">Visual nutrition analysis</p>
 					</div>
 				</div>
-				<div style="display: flex; align-items: center; gap: 15px;">
-					<input type="file" id="foodImage" accept="image/*" style="margin:0; width: auto;">
-					<button onclick="scanFood()" style="margin:0; width: auto; padding: 10px 25px;">
-						<i class="fas fa-upload btn-icon"></i>Scan Dish
+				<div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+					<input type="file" id="foodImage" accept="image/*" style="margin:0; width: auto; max-width: 200px;">
+					<button onclick="scanFood()" style="margin:0; width: auto; padding: 10px 20px;">
+						<i class="fas fa-upload btn-icon"></i>Scan
+					</button>
+					<button onclick="toggleCamera()" class="mobile-only"
+						style="margin:0; width: auto; padding: 10px 20px; background: var(--btn-bg); border: none;">
+						<i class="fas fa-video btn-icon"></i>Camera
 					</button>
 				</div>
 			</div>
+
+			<!-- Camera Container -->
+			<div id="cameraContainer" class="camera-container">
+				<video id="cameraVideo" autoplay playsinline></video>
+				<canvas id="cameraCanvas" style="display:none;"></canvas>
+				<div class="camera-controls">
+					<button class="cam-btn snap" onclick="capturePhoto()" title="Take Photo">
+						<i class="fas fa-circle"></i>
+					</button>
+					<button class="cam-btn close" onclick="toggleCamera()" title="Close Camera">
+						<i class="fas fa-times"></i>
+					</button>
+				</div>
+			</div>
+
 			<div id="foodResult"
-				style="padding: 15px; background: rgba(0,0,0,0.2); border-radius: 12px; min-height: 80px; border-left: 4px solid var(--accent);">
+				style="padding: 15px; background: rgba(0,0,0,0.2); border-radius: 12px; min-height: 80px; border-left: 4px solid var(--accent); margin-top: 20px;">
 				<p style="opacity: 0.6; margin: 0;">Analysis results will appear here after scanning...</p>
 			</div>
 		</section>
 
 		<!-- Separate Parallel Cells: Personal Details & Health Stats (True 50/50 Split) -->
-		<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+		<div class="stats-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
 			<!-- Cell 1: Personal Details (Refined) -->
-			<section style="display: flex; flex-direction: column; gap: 20px; padding: 25px; min-height: 420px;">
+			<section class="bio-section"
+				style="display: flex; flex-direction: column; gap: 20px; padding: 25px; min-height: 420px;">
 				<div
 					style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; margin-bottom: 5px;">
 					<div style="display: flex; align-items: center; gap: 15px;">
@@ -213,7 +234,8 @@
 			</section>
 
 			<!-- Cell 2: Health Stats (Enlarged for Visibility) -->
-			<section style="display: flex; flex-direction: column; gap: 20px; padding: 25px; min-height: 420px;">
+			<section class="metrics-section"
+				style="display: flex; flex-direction: column; gap: 20px; padding: 25px; min-height: 420px;">
 				<div
 					style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; margin-bottom: 5px;">
 					<div style="display: flex; align-items: center; gap: 15px;">
@@ -250,7 +272,8 @@
 		</div>
 
 		<!-- Bottom Bar: Diet Planner (Horizontal Wide & Properly Padded) -->
-		<section style="display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: 25px;">
+		<section class="diet-planner-section"
+			style="display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: 25px;">
 			<div style="display: flex; align-items: center; gap: 20px; flex: 1.5;">
 				<div
 					style="width: 55px; height: 55px; border-radius: 50%; background: var(--glass-bg); display: flex; align-items: center; justify-content: center; border: 1px solid var(--glass-border); color: #9d7bff; font-size: 1.6rem;">

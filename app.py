@@ -10,7 +10,6 @@ from flask_cors import CORS
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 
-
 # Configuration
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # Robust Environment Loading

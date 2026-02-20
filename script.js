@@ -195,18 +195,80 @@ function loadWeeklyChart() {
         .catch(err => console.error("Error loading weekly chart:", err));
 }
 
-function scanFood() {
+let cameraStream = null;
+
+function toggleCamera() {
+    const container = document.getElementById("cameraContainer");
+    const video = document.getElementById("cameraVideo");
+
+    if (container.style.display === "block") {
+        stopCamera();
+        container.style.display = "none";
+    } else {
+        container.style.display = "block";
+        startCamera();
+    }
+}
+
+async function startCamera() {
+    const video = document.getElementById("cameraVideo");
+    try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "environment" }, // Back camera for mobile
+            audio: false
+        });
+        video.srcObject = cameraStream;
+    } catch (err) {
+        console.error("Error accessing camera:", err);
+        alert("Could not access camera. Please ensure you've given permission.");
+        document.getElementById("cameraContainer").style.display = "none";
+    }
+}
+
+function stopCamera() {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+    }
+}
+
+function capturePhoto() {
+    const video = document.getElementById("cameraVideo");
+    const canvas = document.getElementById("cameraCanvas");
+    const context = canvas.getContext("2d");
+
+    // Set canvas dimensions to match video stream
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Draw frame to canvas
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Stop camera
+    stopCamera();
+    document.getElementById("cameraContainer").style.display = "none";
+
+    // Convert to blob and scan
+    canvas.toBlob((blob) => {
+        const file = new File([blob], "captured_food.jpg", { type: "image/jpeg" });
+        scanFood(file);
+    }, "image/jpeg", 0.9);
+}
+
+function scanFood(directFile = null) {
     const input = document.getElementById("foodImage");
-    if (!input.files[0]) {
-        alert("Please select an image first");
+    const file = directFile || (input ? input.files[0] : null);
+
+    if (!file) {
+        alert("Please select an image or take a photo first");
         return;
     }
 
     const formData = new FormData();
-    formData.append("image", input.files[0]);
+    formData.append("image", file);
 
     const resultDiv = document.getElementById("foodResult");
-    resultDiv.innerHTML = "Scanning...";
+    resultDiv.innerHTML = `<p style="opacity:0.8;"><i class="fas fa-spinner fa-spin"></i> Analyzing image...</p>`;
 
     fetch("/scan-food", {
         method: "POST",
@@ -219,11 +281,11 @@ function scanFood() {
                 return;
             }
 
-            let html = `<table><tr><th>Food</th><th>Confidence</th><th>Calories</th></tr>`;
+            let html = `<div style="overflow-x:auto;"><table><tr><th>Food</th><th>Confidence</th><th>Calories</th></tr>`;
             data.foods.forEach(f => {
                 html += `<tr><td>${f.name}</td><td>${f.confidence ? (f.confidence * 100).toFixed(1) + '%' : 'N/A'}</td><td>${f.calories || 'N/A'} kcal</td></tr>`;
             });
-            html += "</table>";
+            html += "</table></div>";
 
             resultDiv.innerHTML = html;
 

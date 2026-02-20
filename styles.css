@@ -547,3 +547,226 @@ body.light-mode .chat-input-area input {
 .profile-dropdown-menu::-webkit-scrollbar-thumb:hover {
     background: #6fc4bc;
 }
+
+/* ===================== CAMERA UI ===================== */
+.camera-container {
+    width: 100%;
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    background: #000;
+    margin-top: 15px;
+    display: none;
+    border: 1px solid var(--glass-border);
+}
+
+#cameraVideo {
+    width: 100%;
+    height: auto;
+    display: block;
+    transform: scaleX(-1);
+    /* Mirror effect */
+}
+
+.camera-controls {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    z-index: 10;
+}
+
+.cam-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    padding: 0;
+    margin: 0;
+}
+
+.cam-btn.snap {
+    background: var(--btn-bg);
+    color: var(--text);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cam-btn.close {
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--text);
+    border: 1px solid var(--glass-border);
+}
+
+/* ===================== MOBILE ONLY UTILITY ===================== */
+.mobile-only {
+    display: none !important;
+}
+
+/* ===================== MOBILE RESPONSIVENESS ===================== */
+@media (max-width: 992px) {
+    .mobile-only {
+        display: flex !important;
+    }
+
+    .dashboard-grid {
+        padding: 0 10px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .diet-planner-section {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 20px !important;
+    }
+
+    .diet-planner-section div {
+        justify-content: center !important;
+    }
+
+    .diet-planner-section>div:last-child {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .header-logo {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 15px 10px;
+    }
+
+    .dashboard-grid {
+        gap: 15px;
+    }
+
+    section {
+        padding: 15px !important;
+    }
+
+    .input-group div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Scanner Mobile Fit */
+    .scanner-section>div:first-child {
+        flex-direction: column;
+        align-items: center !important;
+        text-align: center;
+        gap: 15px !important;
+    }
+
+    .scanner-section>div:first-child>div:last-child {
+        width: 100%;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px !important;
+    }
+
+    #foodImage {
+        grid-column: span 2;
+        max-width: none !important;
+        margin: 0 !important;
+    }
+
+    .scanner-section button {
+        margin: 0 !important;
+        padding: 12px 5px !important;
+        font-size: 0.8rem !important;
+    }
+
+    /* Diet Planner Mobile Fit */
+    .diet-planner-section {
+        padding: 20px 15px !important;
+    }
+
+    .diet-planner-section>div:first-child {
+        margin-bottom: 10px;
+    }
+
+    .diet-planner-section>div:last-child {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px !important;
+        width: 100%;
+        align-items: flex-end;
+    }
+
+    .diet-planner-section .input-group {
+        width: 100% !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+    }
+
+    .diet-planner-section select {
+        width: 100% !important;
+        margin: 5px 0 0 0 !important;
+    }
+
+    .diet-planner-section .input-group:nth-child(3) {
+        grid-column: span 2;
+    }
+
+    #dietBtn {
+        grid-column: span 2;
+        width: 100% !important;
+        margin-top: 5px !important;
+    }
+
+    .theme-toggle {
+        top: 10px;
+        right: 10px;
+        width: 35px;
+        height: 35px;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .chat-window {
+        width: calc(100% - 20px);
+        right: 10px;
+        bottom: 80px;
+        height: 70vh;
+    }
+
+    .chat-toggle {
+        bottom: 15px;
+        right: 15px;
+        padding: 8px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-logo {
+        flex-direction: column;
+        gap: 5px;
+        text-align: center;
+    }
+
+    .header-logo small {
+        margin-left: 0 !important;
+    }
+
+    #out,
+    #foodResult {
+        font-size: 0.85rem;
+    }
+}
