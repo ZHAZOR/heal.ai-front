@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>HEAL.AI | Food as a Med</title>
+	<link rel="stylesheet" href="styles.css">
+	<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<style>
+		body {
+			font-family: 'Outfit', sans-serif;
+			overflow-x: hidden;
+		}
+
+
+
+		.dashboard-grid {
+			display: flex;
+			flex-direction: column;
+			gap: 30px;
+			width: 100%;
+			max-width: 1400px;
+			margin: 0 auto;
+		}
+
+		section {
+			max-width: none;
+			margin-bottom: 0;
+			display: flex;
+			flex-direction: column;
+		}
+
+		.input-group {
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
+			margin-bottom: 10px;
+		}
+
+		.input-group label {
+			font-size: 0.85rem;
+			opacity: 0.8;
+			margin-left: 5px;
+		}
+
+		.btn-icon {
+			margin-right: 8px;
+		}
+
+		#out,
+		#foodResult {
+			font-family: 'Outfit', sans-serif;
+			background: rgba(0, 0, 0, 0.4);
+			border-left: 3px solid var(--accent);
+			min-height: 50px;
+		}
+
+		.theme-toggle {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			background: var(--glass-bg);
+			border: 1px solid var(--glass-border);
+			padding: 10px;
+			border-radius: 50%;
+			cursor: pointer;
+			z-index: 1001;
+			width: 45px;
+			height: 45px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: var(--text);
+		}
+	</style>
+</head>
+
+<body>
+	<div class="theme-toggle" onclick="toggleTheme()">
+		<i class="fas fa-moon"></i>
+	</div>
+
+
+	<div class="header-logo">
+		<i class="fas fa-heartbeat" style="color: var(--accent)"></i>
+		<span>HEAL.AI</span>
+		<small style="font-size:0.9rem; opacity:0.8; margin-left:6px;">
+			Food as a Med
+		</small>
+	</div>
+
+	<div class="dashboard-grid">
+		<!-- Top Bar: AI Food Scanner (Properly Arranged Horizontal) -->
+		<section style="display: flex; flex-direction: column; gap: 20px; padding: 25px;">
+			<div style="display: flex; align-items: center; justify-content: space-between;">
+				<div style="display: flex; align-items: center; gap: 15px;">
+					<div
+						style="width: 50px; height: 50px; border-radius: 50%; background: var(--glass-bg); display: flex; align-items: center; justify-content: center; border: 1px solid var(--glass-border); color: #81D8D0; font-size: 1.5rem;">
+						<i class="fas fa-camera"></i>
+					</div>
+					<div>
+						<h2 style="margin: 0;">AI Food Scanner</h2>
+						<p style="font-size: 0.75rem; opacity: 0.6; margin: 0;">Visual nutrition analysis</p>
+					</div>
+				</div>
+				<div style="display: flex; align-items: center; gap: 15px;">
+					<input type="file" id="foodImage" accept="image/*" style="margin:0; width: auto;">
+					<button onclick="scanFood()" style="margin:0; width: auto; padding: 10px 25px;">
+						<i class="fas fa-upload btn-icon"></i>Scan Dish
+					</button>
+				</div>
+			</div>
+			<div id="foodResult"
+				style="padding: 15px; background: rgba(0,0,0,0.2); border-radius: 12px; min-height: 80px; border-left: 4px solid var(--accent);">
+				<p style="opacity: 0.6; margin: 0;">Analysis results will appear here after scanning...</p>
+			</div>
+		</section>
+
+		<!-- Separate Parallel Cells: Personal Details & Health Stats (True 50/50 Split) -->
+		<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+			<!-- Cell 1: Personal Details (Refined) -->
+			<section style="display: flex; flex-direction: column; gap: 20px; padding: 25px; min-height: 420px;">
+				<div
+					style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; margin-bottom: 5px;">
+					<div style="display: flex; align-items: center; gap: 15px;">
+						<div
+							style="width: 45px; height: 45px; border-radius: 50%; background: var(--glass-bg); display: flex; align-items: center; justify-content: center; border: 1px solid var(--glass-border); color: #9d7bff; font-size: 1.2rem;">
+							<i class="fas fa-id-card"></i>
+						</div>
+						<h2 style="margin:0;">Biometrics</h2>
+					</div>
+					<button onclick="analyze()" style="margin: 0; width: auto; padding: 8px 20px; font-size: 0.85rem;">
+						<i class="fas fa-magic btn-icon"></i>Analyze
+					</button>
+				</div>
+				<div style="display: flex; flex-direction: column; gap: 15px;">
+					<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+						<div class="input-group">
+							<label>Full Name</label>
+							<div style="position: relative;">
+								<input id="name" placeholder="Enter your name" style="margin: 0;"
+									onclick="toggleProfileMenu()" autocomplete="off">
+								<div id="profile-dropdown" class="profile-dropdown-menu"
+									style="display:none; width: 100%;">
+									<div
+										style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 8px; padding-left: 5px;">
+										Saved Profiles</div>
+									<div id="profile-list-container"></div>
+								</div>
+							</div>
+						</div>
+						<div class="input-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+							<div>
+								<label>Age</label>
+								<input id="age" type="number" placeholder="Age">
+							</div>
+							<div>
+								<label>Sex</label>
+								<select id="gender" style="padding: 10px;">
+									<option value="male">M</option>
+									<option value="female">F</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+						<div class="input-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+							<div>
+								<label>Height</label>
+								<div style="display: flex; gap: 5px;">
+									<input id="height" type="number" placeholder="H" style="flex: 1.5; min-width: 0;">
+									<select id="height-unit"
+										style="padding: 5px; flex: 1; min-width: 55px; font-size: 0.8rem;">
+										<option value="cm">cm</option>
+										<option value="ft">ft</option>
+									</select>
+								</div>
+							</div>
+							<div>
+								<label>Weight</label>
+								<div style="display: flex; gap: 5px;">
+									<input id="weight" type="number" placeholder="W" style="flex: 1.5; min-width: 0;">
+									<select id="weight-unit"
+										style="padding: 5px; flex: 1; min-width: 55px; font-size: 0.8rem;">
+										<option value="kg">kg</option>
+										<option value="lbs">lbs</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="input-group">
+							<label>Activity Level</label>
+							<select id="activity">
+								<option value="sedentary">Sedentary</option>
+								<option value="light">Active</option>
+								<option value="moderate">Moderate</option>
+								<option value="active">Athlete</option>
+							</select>
+						</div>
+					</div>
+					<div class="input-group">
+						<label>Health Goal</label>
+						<select id="goal">
+							<option value="loss">Weight Loss</option>
+							<option value="maintain">Maintain Current Weight</option>
+							<option value="gain">Muscle Gain / Weight Gain</option>
+						</select>
+					</div>
+				</div>
+			</section>
+
+			<!-- Cell 2: Health Stats (Enlarged for Visibility) -->
+			<section style="display: flex; flex-direction: column; gap: 20px; padding: 25px; min-height: 420px;">
+				<div
+					style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px; margin-bottom: 5px;">
+					<div style="display: flex; align-items: center; gap: 15px;">
+						<div
+							style="width: 45px; height: 45px; border-radius: 50%; background: var(--glass-bg); display: flex; align-items: center; justify-content: center; border: 1px solid var(--glass-border); color: #81D8D0; font-size: 1.2rem;">
+							<i class="fas fa-poll"></i>
+						</div>
+						<h2 style="margin:0;">Live Health Metrics</h2>
+					</div>
+					<button id="pdfReportBtn"
+						style="display:none; width: auto; padding: 8px 20px; margin: 0; font-size: 0.85rem;">
+						<i class="fas fa-file-pdf btn-icon"></i>Export PDF
+					</button>
+				</div>
+				<div style="display: flex; flex-direction: column; gap: 20px;">
+					<div id="out"
+						style="padding: 18px; background: rgba(0,0,0,0.25); border-radius: 12px; font-size: 0.95rem; border-left: 4px solid #ff6384; line-height: 1.6; min-height: 120px;">
+						Analyzing your real-time data...
+					</div>
+					<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start;">
+						<div style="height: 180px;">
+							<canvas id="macroPieChart" style="max-height: 180px; width: 100%;"></canvas>
+						</div>
+						<div style="height: 180px;">
+							<canvas id="calorieChart" style="max-height: 180px; width: 100%;"></canvas>
+						</div>
+					</div>
+					<div id="graphicalAnalysis"
+						style="font-size: 0.85rem; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; border: 1px solid var(--glass-border); display:none;">
+						<p id="analysisText" style="margin:0; opacity:0.9; line-height: 1.5;"></p>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<!-- Bottom Bar: Diet Planner (Horizontal Wide & Properly Padded) -->
+		<section style="display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: 25px;">
+			<div style="display: flex; align-items: center; gap: 20px; flex: 1.5;">
+				<div
+					style="width: 55px; height: 55px; border-radius: 50%; background: var(--glass-bg); display: flex; align-items: center; justify-content: center; border: 1px solid var(--glass-border); color: #9d7bff; font-size: 1.6rem;">
+					<i class="fas fa-apple-whole"></i>
+				</div>
+				<div>
+					<h3 style="margin: 0; font-size: 1.2rem;"><i class="fas fa-utensils btn-icon"
+							style="color: #6c63ff;"></i>Diet Planner</h3>
+					<p style="font-size: 0.8rem; opacity: 0.6; margin: 0;">Personalized nutrition optimization</p>
+				</div>
+			</div>
+			<div style="display: flex; gap: 15px; align-items: flex-end; flex: 3; justify-content: flex-end;">
+				<div class="input-group" style="margin:0;">
+					<label style="font-size: 0.7rem;">Diet Preference</label>
+					<select id="diet" style="margin:0; height: 38px; padding: 5px 10px; width: 140px;">
+						<option value="veg">Vegetarian</option>
+						<option value="nonveg">Non-Veg</option>
+						<option value="vegan">Vegan</option>
+						<option value="keto">Keto (High Fat)</option>
+						<option value="paleo">Paleo</option>
+						<option value="mediterranean">Mediterranean</option>
+						<option value="pescatarian">Pescatarian</option>
+						<option value="lowcarb">Low Carb</option>
+					</select>
+				</div>
+				<div class="input-group" style="margin:0;">
+					<label style="font-size: 0.7rem;">Meals/Day</label>
+					<select id="mealsPerDay" style="margin:0; height: 38px; padding: 5px 10px; width: 100px;">
+						<option value="3">3 Meals</option>
+						<option value="4">4 Meals</option>
+						<option value="5">5 Meals</option>
+					</select>
+				</div>
+				<div class="input-group" style="margin:0; min-width: 140px;">
+					<label style="font-size: 0.7rem;">Allergies</label>
+					<select id="allergies" style="margin:0; height: 38px; padding: 5px 10px;">
+						<option value="none">None</option>
+						<option value="nuts">Nuts</option>
+						<option value="dairy">Dairy</option>
+						<option value="gluten">Gluten</option>
+						<option value="seafood">Seafood</option>
+						<option value="soy">Soy</option>
+						<option value="egg">Eggs</option>
+					</select>
+				</div>
+				<button onclick="getAIDiet()" id="dietBtn"
+					style="margin:0; width: auto; height: 38px; padding: 0 25px; background: var(--btn-bg); border:none; box-shadow: 0 4px 15px rgba(108, 99, 255, 0.2);">
+					Generate Plan
+				</button>
+			</div>
+		</section>
+		<div id="aiDietResult"
+			style="padding: 40px; background: rgba(0,0,0,0.25); border-radius: 18px; border-top: 4px solid #6c63ff; display: none; margin-top: 40px; min-height: 150px;">
+			<div style="text-align: center; padding: 20px;">
+				<p style="font-size: 1.1rem; opacity: 0.9;"><i class="fas fa-spinner fa-spin"
+						style="color: #6c63ff; margin-right: 10px;"></i> Preparing your personalized menu...</p>
+			</div>
+		</div>
+	</div>
+	</div>
+
+	<!-- Chatbot Bella -->
+	<div id="chat-toggle" class="chat-toggle" onclick="toggleChat()">
+		<div class="cyber-cat-container" style="width: 35px; height: 35px;">
+			<img src="leocat.svg" alt="Leocat" style="width: 75%; height: 75%; object-fit: contain;">
+		</div>
+		<span>Chat with Bella</span>
+	</div>
+
+	<div id="chat-window" class="chat-window">
+		<div class="chat-header">
+			<div class="cyber-cat-container" style="width: 40px; height: 40px;">
+				<img src="leocat.svg" alt="Leocat" style="width: 75%; height: 75%; object-fit: contain;">
+			</div>
+			<div class="chat-title">
+				<strong>Bella</strong>
+				<small>Active Now</small>
+			</div>
+			<button class="close-chat" onclick="toggleChat()">&times;</button>
+		</div>
+		<div id="chat-messages" class="chat-messages">
+			<div class="message bella-message">Hello! I'm Bella, your AI health assistant. How can I help you today?
+			</div>
+		</div>
+		<div class="chat-input-area">
+			<input type="text" id="chat-input" placeholder="Type a message..." onkeypress="handleChatKey(event)">
+			<button onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
+		</div>
+	</div>
+
+	<script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="maneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#9d7bff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#6c63ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#81D8D0;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="faceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2b1055;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4B0082;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Mane (Stylized Lion/Cat Hybrid) -->
+  <circle cx="100" cy="100" r="85" fill="url(#maneGrad)" filter="url(#glow)" />
+  <path d="M100 15 L115 40 L145 25 L150 55 L180 60 L170 90 L195 110 L170 130 L180 160 L150 165 L145 195 L115 180 L100 210 L85 180 L55 195 L50 165 L20 160 L30 130 L5 110 L30 90 L20 60 L50 55 L55 25 L85 40 Z" fill="url(#maneGrad)" opacity="0.8" />
+  
+  <!-- Face Background -->
+  <circle cx="100" cy="100" r="60" fill="url(#faceGrad)" />
+  
+  <!-- Ears -->
+  <path d="M60 60 L70 30 L95 55 Z" fill="url(#faceGrad)" /> 
+  <path d="M140 60 L130 30 L105 55 Z" fill="url(#faceGrad)" />
+
+  <!-- Eyes (Glowing Turquoise) -->
+  <ellipse cx="80" cy="95" rx="14" ry="10" fill="#81D8D0" filter="url(#glow)" />
+  <ellipse cx="120" cy="95" rx="14" ry="10" fill="#81D8D0" filter="url(#glow)" />
+  <ellipse cx="80" cy="95" rx="4" ry="9" fill="#2b1055" />
+  <ellipse cx="120" cy="95" rx="4" ry="9" fill="#2b1055" />
+  
+  <!-- Nose -->
+  <path d="M92 115 L108 115 L100 128 Z" fill="#9d7bff" />
+  
+  <!-- Whiskers -->
+  <line x1="130" y1="120" x2="160" y2="115" stroke="#81D8D0" stroke-width="2" opacity="0.6" />
+  <line x1="130" y1="125" x2="160" y2="128" stroke="#81D8D0" stroke-width="2" opacity="0.6" />
+  <line x1="70" y1="120" x2="40" y2="115" stroke="#81D8D0" stroke-width="2" opacity="0.6" />
+  <line x1="70" y1="125" x2="40" y2="128" stroke="#81D8D0" stroke-width="2" opacity="0.6" />
+
+  <!-- Mouth -->
+  <path d="M100 128 Q 90 138 80 135" stroke="#9d7bff" stroke-width="2" fill="none" />
+  <path d="M100 128 Q 110 138 120 135" stroke="#9d7bff" stroke-width="2" fill="none" />
+</svg>
